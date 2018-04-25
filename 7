@@ -1,0 +1,74 @@
+lex:
+%{
+#include "y.tab.h"
+#include<stdio.h>
+int yylval;
+%}
+%%
+"int"[ ]+ {return T;}
+"float"[ ]+ {return T;}
+"char"[ ]+ {return T;}
+"double"[ ]+ {return T;}
+"short"[ ]+ {return T;}
+"long int"[ ]+ {return T;}
+[a-zA_Z][a-zA-Z]*[0-9]* {return ID;}
+[0-9]+ {return NUM;}
+[ \t] ;
+[;] {return COLON;}
+[,] {return COMMA;}
+\n {return 0;}
+. {return yytext[0];}
+%%
+int yywrap()
+{
+return 1;
+}
+
+
+
+
+
+yacc
+%{
+#include<stdio.h>
+int flag=0;
+%}
+%token ID T COLON COMMA NUM
+%%
+stmt: declaration {printf("\n declration is validated!");}
+;
+
+declaration : T L C COL
+;
+
+L : L COM  ID
+| ID
+|
+;
+
+C : '[' NUM ']' C
+| '[' ID ']' C  {printf("\n Size of an array should be an integer"); exit(0);}
+| '[' NUM C { printf("\n close bracket missing in array declration");exit(0);}
+| '[' C {printf("\n size of array should be given");exit(0);}
+| '[' NUM '.' ']' C { printf("\n float number cant be the size of an array");exit(0);}
+|
+;
+
+COM: COMMA
+| COMMA COM {printf("Syntax error: consequtive commas used: invalid");exit(0);}
+;
+
+COL: COLON
+| COLON COL {printf("\n Syntax error: consequtive semicolon are used : invalid");exit(0);}
+;
+%%
+main()
+{
+printf(" Enter valid declaration\n");
+yyparse();
+}
+yyerror()
+{
+printf(" Invalid statement\n");
+exit(1);
+}
