@@ -1,0 +1,85 @@
+%{
+#include<stdio.h>
+int c=0;
+FILE *fp;
+%}
+%%
+\n { c++; }
+["][a-zA-Z0-9]*["] {ECHO; printf(" Valid String in line number %d\n ",c+1);}
+["][a-zA-Z0-9]* { ECHO; printf(" InValid String in line number %d\n ",c+1);}
+. ;
+%%
+main()
+{
+yyin=fopen("source.txt","r");
+yylex();
+fclose(yyin);
+}
+source.txt
+#include<stdio.h>
+#include<conio.h>
+#include<string.h>
+void main()
+{
+int a,b,h;
+a=a+b;
+char d[20]="d",h[67]="yu;
+char c[10]="msrit";
+a=a+/b+h;
+strlen("msrit");
+strlen("msr);
+strcpy(c,"Bangalore);
+b=b+*;
+}
+3b..
+%{
+#include<stdio.h>
+int c=0;
+FILE *fp;
+%}
+operator [-+*/]
+identifier [a-zA-Z][a-zA-Z0-9-]*
+number [0-9]+
+expression ({identifier}|{number}){operator}
+({identifier}|{number})
+%%
+\n { c++; }
+^"#".+ ;
+^("int "|"float "|"char ").+ ;
+"void main()" ;
+{identifier}"="({expression}+";") { printf("Valid expression in
+line no : %d\t",c+1);ECHO;printf("\n");}
+{identifier}"="({number}|{identifier}";") { printf("Valid
+expression in line no : %d\t",c+1);ECHO;printf("\n");}
+({number}|([0-9]*[a-zA-Z0-9-]+))"="{expression}+ { printf("InValid
+expression in line no : %d; L-value should satisfy the identifier
+rules\n",c+1);ECHO;printf("\n");}
+{identifier}"=;" { printf("InValid expression in line no : %d;
+R-value required; Expression is needed at right hand side of
+assignment operation\n",c+1);ECHO;printf("\n");}
+{operator}{operator}+ {printf(" Invalid expression in line no:
+%d;More than one operator can't be used in expression
+consequetively",c+1);ECHO;printf("\n");}
+.|\n ;
+%%
+main()
+{
+yyin=fopen("source.txt","r");
+yylex();
+fclose(yyin);
+}
+-------
+source.txt
+
+#include<stdio.h>
+#include<conio.h>
+#include<string.h>
+void main()
+{
+int a=1s,b,h;
+a=a+b;
+a=a+/b+h;
+1a=7+j-;
+a=;
+b=b+*;
+}
